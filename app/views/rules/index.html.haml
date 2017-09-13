@@ -1,0 +1,20 @@
+%p#notice= notice
+%h1 Rules
+%table
+  %thead
+    %tr
+      %th Name
+      %th Description
+      %th Limit m
+      %th{:colspan => "3"}
+  %tbody
+    - @rules.each do |rule|
+      %tr
+        %td= rule.name
+        %td= rule.description
+        %td= rule.limit_m
+        %td= link_to 'Show', rule
+        %td= link_to 'Edit', edit_rule_path(rule)
+        %td= link_to 'Destroy', rule, method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to 'New Rule', new_rule_path

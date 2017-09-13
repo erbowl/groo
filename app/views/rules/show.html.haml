@@ -1,0 +1,13 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @rule.name
+%p
+  %strong Description:
+  = @rule.description
+%p
+  %strong Limit m:
+  = @rule.limit_m
+= link_to 'Edit', edit_rule_path(@rule)
+|
+= link_to 'Back', rules_path

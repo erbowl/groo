@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Groo
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    -# skyway用に追加
+    %script{:src => "https://cdn.webrtc.ecl.ntt.com/skyway-latest.js", :type => "text/javascript"}
+    %script{:crossorigin => "anonymous", :integrity => "sha256-DI6NdAhhFRnO2k51mumYeDShet3I8AKCQf/tf7ARNhI=", :src => "https://code.jquery.com/ui/1.11.4/jquery-ui.js"}
+  %body
+    = yield

@@ -1,0 +1,20 @@
+= form_for(rule) do |f|
+  - if rule.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(rule.errors.count, "error")
+        prohibited this rule from being saved:
+      %ul
+        - rule.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :description
+    = f.text_field :description
+  .field
+    = f.label :limit_m
+    = f.number_field :limit_m
+  .actions
+    = f.submit

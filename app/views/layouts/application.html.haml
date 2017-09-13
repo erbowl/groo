@@ -1,0 +1,59 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Groo
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+  %body
+    %nav.navbar.navbar-inverse
+      .container-fluid
+        .navbar-header
+          %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-2", "data-toggle" => "collapse", :type => "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{:href => "#"} Brand
+        #bs-example-navbar-collapse-2.collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{:href => "#"}
+                Link
+                %span.sr-only (current)
+            %li
+              %a{:href => "#"} Link
+            %li.dropdown
+              %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+                Dropdown
+                %span.caret
+              %ul.dropdown-menu{:role => "menu"}
+                %li
+                  %a{:href => "#"} 高坂 穂乃果
+                %li
+                  %a{:href => "#"} 南 ことり
+                %li
+                  %a{:href => "#"} 園田 海未
+                %li.divider
+                %li
+                  %a{:href => "#"} 小泉 花陽
+                %li
+                  %a{:href => "#"} 星空 凛
+                %li
+                  %a{:href => "#"} 西木野 真姫
+                %li.divider
+                %li
+                  %a{:href => "#"} 矢澤 にこ
+                %li
+                  %a{:href => "#"} 絢瀬 絵里
+                %li
+                  %a{:href => "#"} 東條 希
+          %form.navbar-form.navbar-left{:role => "search"}
+            .form-group
+              %input.form-control{:placeholder => "Search", :type => "text"}/
+            %button.btn.btn-default{:type => "submit"} 検索
+          %ul.nav.navbar-nav.navbar-right
+            %li
+              %a{:href => "#"} Link
+    = yield
