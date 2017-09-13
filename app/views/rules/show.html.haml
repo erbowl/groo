@@ -1,13 +1,123 @@
-%p#notice= notice
 %p
-  %strong Name:
-  = @rule.name
-%p
-  %strong Description:
-  = @rule.description
-%p
-  %strong Limit m:
-  = @rule.limit_m
-= link_to 'Edit', edit_rule_path(@rule)
-|
-= link_to 'Back', rules_path
+.container
+  .alert.alert-info{:role => "alert"}
+    %strong お題:
+    = @rule.name
+    %strong
+  %p
+    制限時間
+    = succeed ":" do
+      %span#timer_m 02
+    %span#timer_s 0
+  %p
+    %strong> 条件:
+    面白いこと
+  %p
+    %strong ※ホワイトボードが結論として最終的に保存されます
+  %textarea#white-bord{:cols => "100", :name => "name", :rows => "10"}
+%video#my-video{:autoplay => ""}
+#peers
+  %p 参加者
+/ あとでファイル分ける
+:javascript
+  /* eslint-disable require-jsdoc */
+  $(function() {
+    var roomName='#{@rule.id}';
+    // Peer object
+    var date = new Date() ;
+    var a = date.getTime() ;
+    var peer_count=0;
+    const peer = new Peer(roomName+"_"+a,{
+      key:   "ca56abf9-c509-4d78-b2cc-88a51817fd99",
+      debug: 3
+    });
+    let localStream;
+    let room;
+    peer.on('open',function(){
+      navigator.mediaDevices.getUserMedia({video:true, audio:true }).then(stream => {
+        $('#my-video').get(0).srcObject = stream;
+        localStream = stream;
+        room=peer.joinRoom(roomName,{mode:"sfu",stream:localStream});
+        room.on('open',function(){
+          room.on("stream",function(stream){
+            stream_to_tag(stream);
+          })
+          room.on("data",function(data){
+            $("#white-bord").val(data.data.data);
+          })
+          $("#white-bord").keyup(function(){
+            var data=$("#white-bord").val();
+            room.send({label:"white-bord",data:data});
+          })
+          room.on("peerLeave",function(peerId){
+            $("video#"+peerId).hide();
+          })
+        })
+      })
+    })
+
+
+  function stream_to_tag(stream) {
+    if($("video#"+stream.peerId).length==0){
+      $video=$("<video>");
+      $("body").append($video);
+      $video.attr("src",window.URL.createObjectURL(stream));
+      $video.attr("id",stream.peerId);
+      $video.attr("class","other-peer");
+      $video.show();
+      var rgbColor = 'rgb(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ')';
+      $video.css('border-color', rgbColor);
+      $video.draggable();
+      $pe=$("<p>"+stream.peerId+"</p>");
+      $("#peers").append($pe);
+      $pe.css('color', rgbColor);;
+    }
+  }
+
+
+  var m;
+  var s;
+  var remaining;
+
+
+
+  function countDown(){
+    m=parseInt($("#timer_m").text());
+    s=parseInt($("#timer_s").text());
+    remaining=m*60+s;
+    if(remaining>0){
+       if (s>0) {
+         s--;
+       }else{
+         s=59;
+         m--;
+       }
+       $("#timer_m").text(('00' + m).slice(-2));
+       $("#timer_s").text(('00' + s).slice(-2));
+    }else{
+      $("a#tri").click();
+      clearTimeout(set);
+    }
+  }
+  var set=setInterval(countDown,1000);
+  });
+/ Button trigger modal
+%a#tri{"data-target" => "#exampleModal", "data-toggle" => "modal", :type => "button"}
+#exampleModal.modal.fade{"aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+        %h4#exampleModalLabel.modal-title MVPを選ぼう
+      .modal-body
+        %form
+          .form-group
+            %label.control-label{:for => "recipient-name"} MVPを選択
+            %input#recipient-name.form-control{:type => "text"}/
+          .form-group
+            %label.control-label{:for => "message-text"} 今回のGDの感想・反省点
+            %textarea#message-text.form-control
+      .modal-footer
+        %a{:href => "/"}
+          %button.btn.btn-primary{:type => "button"} 送信する

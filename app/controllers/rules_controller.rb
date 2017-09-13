@@ -10,6 +10,7 @@ class RulesController < ApplicationController
   # GET /rules/1
   # GET /rules/1.json
   def show
+    render :layout => "video_mode"
   end
 
   # GET /rules/new
