@@ -34,7 +34,7 @@
     let localStream;
     let room;
     peer.on('open',function(){
-      navigator.mediaDevices.getUserMedia({video:true, audio:true }).then(stream => {
+      navigator.mediaDevices.getUserMedia({video:{width:100,height:100}, audio:true }).then(stream => {
         $('#my-video').get(0).srcObject = stream;
         localStream = stream;
         room=peer.joinRoom(roomName,{mode:"sfu",stream:localStream});
