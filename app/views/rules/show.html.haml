@@ -1,20 +1,21 @@
 %p
-.container
-  .alert.alert-info{:role => "alert"}
-    %strong お題:
-    = @rule.name
-    %strong
-  %p
-    制限時間
-    = succeed ":" do
-      %span#timer_m 02
-    %span#timer_s 0
-  %p
-    %strong> 条件:
-    面白いこと
-  %p
-    %strong ※ホワイトボードが結論として最終的に保存されます
-  %textarea#white-bord{:cols => "100", :name => "name", :rows => "10"}
+.div.row
+  .col-md-8.col-md-offset-1
+    .alert.alert-info{:role => "alert"}
+      %strong お題:
+      = @rule.name
+      %strong
+    %p
+      制限時間
+      = succeed ":" do
+        %span#timer_m 02
+      %span#timer_s 0
+    %p
+      %strong> 条件:
+      面白いこと
+    %p
+      %strong ※ホワイトボードが結論として最終的に保存されます
+    %textarea#white-bord{:rows => "10"}
 %video#my-video{:autoplay => "",:muted=>""}
 #peers
   %p 参加者
@@ -67,7 +68,7 @@
       $video.attr("id",stream.peerId);
       $video.attr("class","other-peer");
       $video.attr("autoplay",true);
-      
+
       // $video.attr("controls",true);
       $video.show();
       var rgbColor = 'rgb(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ')';
