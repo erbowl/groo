@@ -10,6 +10,25 @@ class RulesController < ApplicationController
   # GET /rules/1
   # GET /rules/1.json
   def show
+    # TODO: どこかで環境変数として設定する
+    secret_key = "t9QyglOldhvDHT91SGPuPeEpwX4WJV3L"
+    # TODO: ルールによって有効期限を買えておく
+    ttl = 3600
+    peer_id = Time.now.to_i
+    unix_timestamp=Time.now.to_i
+
+    message = "#{unix_timestamp}:#{ttl}:#{peer_id}"
+    hash = OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), secret_key, message)
+    auth_token=Base64.encode64(hash).strip()
+
+
+    credential = {
+       peerId: peer_id,
+       timestamp: unix_timestamp,
+       ttl: ttl,
+       authToken: auth_token
+     }
+    @credential= JSON.generate(credential)
     render :layout => "video_mode"
   end
 

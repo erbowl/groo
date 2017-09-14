@@ -15,7 +15,7 @@
   %p
     %strong ※ホワイトボードが結論として最終的に保存されます
   %textarea#white-bord{:cols => "100", :name => "name", :rows => "10"}
-%video#my-video{:autoplay => ""}
+%video#my-video{:autoplay => "",:muted=>""}
 #peers
   %p 参加者
 / あとでファイル分ける
@@ -27,8 +27,10 @@
     var date = new Date() ;
     var a = date.getTime() ;
     var peer_count=0;
-    const peer = new Peer(roomName+"_"+a,{
+    var credential= #{raw @credential};
+    const peer = new Peer(credential.peerId,{
       key:   "ca56abf9-c509-4d78-b2cc-88a51817fd99",
+      credential: credential,
       debug: 3
     });
     let localStream;
@@ -64,6 +66,9 @@
       $video.attr("src",window.URL.createObjectURL(stream));
       $video.attr("id",stream.peerId);
       $video.attr("class","other-peer");
+      $video.attr("autoplay",true);
+      
+      // $video.attr("controls",true);
       $video.show();
       var rgbColor = 'rgb(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ')';
       $video.css('border-color', rgbColor);

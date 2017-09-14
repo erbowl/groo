@@ -17,7 +17,7 @@ class User < ApplicationRecord
   end
 
   private
-  # :TODO facebookからメルアドを取得する そして、取得できなかった場合は促す仕組み
+  # TODO: facebookからメルアドを取得する そして、取得できなかった場合は促す仕組み
   # Create dummy email for OAuth
   def self.dummy_email(auth)
    "#{auth.uid}-#{auth.provider}@example.com"
