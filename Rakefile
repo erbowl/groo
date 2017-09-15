@@ -4,3 +4,5 @@
 require_relative 'config/application'
 
 Rails.application.load_tasks
+
+SourceAnnotationExtractor::Annotation.register_extensions("css", "scss", "sass", "less", "js","haml") { |tag| /\/\/\s*(#{tag}):?\s*(.*)$/ }

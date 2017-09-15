@@ -8,15 +8,15 @@
     %p
       制限時間
       = succeed ":" do
-        %span#timer_m 02
-      %span#timer_s 0
+        %span#timer_m=sprintf("%02d", @rule.limit_m)
+      %span#timer_s 00
     %p
       %strong> 条件:
       面白いこと
     %p
       %strong ※ホワイトボードが結論として最終的に保存されます
     %textarea#white-bord{:rows => "10"}
-%video#my-video{:autoplay => "",:muted=>""}
+%video#my-video{:autoplay => "",:muted=>"",:poster=> asset_path("rr.png")}
 #peers
   %p 参加者
 / あとでファイル分ける
@@ -32,7 +32,7 @@
     const peer = new Peer(credential.peerId,{
       key:   "ca56abf9-c509-4d78-b2cc-88a51817fd99",
       credential: credential,
-      debug: 3
+      debug: 1
     });
     let localStream;
     let room;
@@ -52,6 +52,20 @@
             var data=$("#white-bord").val();
             room.send({label:"white-bord",data:data});
           })
+          $("#my-video").click(function(){
+            var condition={width:100,height:100};
+            // 一回全部止める
+            localStream.getAudioTracks()[0].stop();
+            if(localStream.getVideoTracks()[0]){
+              localStream.getVideoTracks()[0].stop();
+              condition=false;
+            }
+            navigator.mediaDevices.getUserMedia({video:condition, audio:true }).then(stream => {
+              localStream=stream;
+              room.replaceStream(localStream);
+              $('#my-video').get(0).srcObject = localStream;
+            })
+          })
           room.on("peerLeave",function(peerId){
             $("video#"+peerId).hide();
           })
@@ -68,8 +82,8 @@
       $video.attr("id",stream.peerId);
       $video.attr("class","other-peer");
       $video.attr("autoplay",true);
-
-      // $video.attr("controls",true);
+      // TODO: ここにユーザーのプロフィール画像が埋め込まれるようにする
+      $video.attr("poster","#{raw asset_path("rr.png")}");
       $video.show();
       var rgbColor = 'rgb(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ')';
       $video.css('border-color', rgbColor);
@@ -77,6 +91,9 @@
       $pe=$("<p>"+stream.peerId+"</p>");
       $("#peers").append($pe);
       $pe.css('color', rgbColor);;
+    }else{
+      // すでにDOMがあるときはstreamを入れ替える
+      $("video#"+stream.peerId).attr("src",window.URL.createObjectURL(stream));
     }
   }
 

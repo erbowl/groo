@@ -10,6 +10,8 @@ class RulesController < ApplicationController
   # GET /rules/1
   # GET /rules/1.json
   def show
+    # TODO: もうちょっといい感じにココらへんを書き直す
+    # TODO: 既にcredentialを持ってる場合の場合分け
     # TODO: どこかで環境変数として設定する
     secret_key = "t9QyglOldhvDHT91SGPuPeEpwX4WJV3L"
     # TODO: ルールによって有効期限を買えておく
