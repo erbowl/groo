@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  has_many :room_users
+  has_many :rooms,through: :room_users
+  before_create :set_uuid
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -23,4 +26,5 @@ class User < ApplicationRecord
   def self.dummy_email(auth)
    "#{auth.uid}-#{auth.provider}@example.com"
   end
+
 end

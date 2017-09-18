@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @thema.name
+%p
+  %b Genre:
+  = @thema.genre
+
+= link_to 'Edit', edit_thema_path(@thema)
+\|
+= link_to 'Back', themas_path

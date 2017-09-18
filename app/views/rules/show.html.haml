@@ -1,9 +1,9 @@
-%p
+%p=@room.inspect
 .div.row
   .col-md-8.col-md-offset-1
     .alert.alert-info{:role => "alert"}
       %strong お題:
-      = @rule.name
+      = @room.thema.name
       %strong
     %p
       制限時間
@@ -68,6 +68,10 @@
           })
           room.on("peerLeave",function(peerId){
             $("video#"+peerId).hide();
+          })
+          room.on("peerJoin",function(peerId){
+            var data=$("#white-bord").val();
+            room.send({label:"white-bord",data:data});
           })
         })
       })

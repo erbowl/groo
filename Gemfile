@@ -61,3 +61,5 @@ gem 'honoka-rails', '>= 3.3.6.3'
 gem 'devise'
 gem 'omniauth-facebook'
 # gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+gem 'rails-erd', group: [:development, :test]
+gem 'bootstrap_form'

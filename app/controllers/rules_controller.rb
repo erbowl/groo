@@ -1,4 +1,6 @@
 class RulesController < ApplicationController
+  before_action :authenticate_user!
+
   before_action :set_rule, only: [:show, :edit, :update, :destroy]
 
   # GET /rules
@@ -10,6 +12,15 @@ class RulesController < ApplicationController
   # GET /rules/1
   # GET /rules/1.json
   def show
+
+    # 既に部屋がある/ないなら開いているところ/新しく作る
+    if current_user.rooms.where(rule_id:@rule.id)[0]
+      @room= current_user.rooms.where(rule_id:@rule.id)[0]
+    else
+      @room= @rule.rooms.where("users_count<="+@rule.max_member.to_s)[0] || @rule.rooms.create(thema_id:1) # FIXME:ここにthema_idがないとエラーがでる。
+      @room.users << current_user
+    end
+
     # TODO: もうちょっといい感じにココらへんを書き直す
     # TODO: 既にcredentialを持ってる場合の場合分け
     # TODO: どこかで環境変数として設定する
@@ -23,7 +34,6 @@ class RulesController < ApplicationController
     hash = OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), secret_key, message)
     auth_token=Base64.encode64(hash).strip()
 
-
     credential = {
        peerId: peer_id,
        timestamp: unix_timestamp,
@@ -31,6 +41,7 @@ class RulesController < ApplicationController
        authToken: auth_token
      }
     @credential= JSON.generate(credential)
+
     render :layout => "video_mode"
   end
 
